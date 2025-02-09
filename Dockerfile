@@ -1,13 +1,14 @@
 FROM ubuntu:jammy
-RUN sed '/security/d' -i /etc/apt/sources.list
-RUN sed '/jammy-updates/d' -i /etc/apt/sources.list
-RUN apt update
-RUN apt install -y wget curl unzip nano jq nginx
-RUN mkdir /opt/cpolar
+RUN sed '/security/d' -i /etc/apt/sources.list \
+	&& sed '/jammy-updates/d' -i /etc/apt/sources.list \
+	&& apt update \
+	&& apt install -y wget curl unzip nano jq nginx \
+	&& apt clean \
+	&& mkdir /opt/cpolar
 WORKDIR /opt/cpolar
 
-RUN wget https://www.cpolar.com/static/downloads/releases/3.3.12/cpolar-stable-linux-amd64.zip
-RUN unzip cpolar-stable-linux-amd64.zip && rm -rf cpolar-stable-linux-amd64.zip
+RUN wget https://www.cpolar.com/static/downloads/releases/3.3.12/cpolar-stable-linux-amd64.zip \
+	&& unzip cpolar-stable-linux-amd64.zip && rm -rf cpolar-stable-linux-amd64.zip
 
 ADD ./docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh
